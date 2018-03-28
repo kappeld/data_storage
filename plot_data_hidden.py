@@ -12,48 +12,55 @@ def update_plot(i, data,  scat,time):
     return scat,
 
 
-def animatedplot(fig,data1,data2, data3):
+def animatedplot(fig,data1,data2,data3, data4):
     
     time = fig.text(0.02, 0.95, '')
     time.set_text("")
     
-    plt.subplot(412)
-    scat1 = plt.scatter(range(len(data1[0])),data1[0][...,0],s=1, c = data1[0][...,1])
+    plt.subplot(512)
+    scat1 = plt.scatter(range(len(data1[0])),data1[0][...,0], s=1, c = data1[0][...,1])
     plt.colorbar(scat1, spacing='proportional')
     plt.ylabel("Up Neuron Group Weights")
     plt.xlabel("Time (ms)")
-    plt.ylim(0,5)
+    plt.ylim(0,10)
     ani1 = animation.FuncAnimation(fig, update_plot, frames= range(frames),fargs=(data1, scat1,time))
 
-    plt.subplot(413) 
-    scat2 = plt.scatter(range(len(data2[0])),data2[0][...,0],s=1, c = data2[0][...,1])
+    plt.subplot(513) 
+    scat2 = plt.scatter(range(len(data2[0])),data2[0][...,0], s=1, c = data2[0][...,1])
     plt.colorbar(scat2, spacing='proportional')
     plt.ylabel("Down Neuron Group Weights")
     plt.xlabel("Time (ms)")
-    plt.ylim(0,5)
+    plt.ylim(0,10)
     ani2 = animation.FuncAnimation(fig, update_plot, frames= range(frames),fargs=(data2, scat2,time))    
     
-    plt.subplot(414) 
-    scat3 = plt.scatter(range(len(data3[0])),data3[0][...,0],s=1, c = data3[0][...,1])
-    plt.colorbar(scat3, spacing='proportional')
+    plt.subplot(514) 
+    scat3 = plt.scatter(range(len(data3[0])),data3[0][...,0], s=1, c = data3[0][...,1])
     plt.ylabel("Zero Neuron Group Weights")
-    plt.ylim(0,5)
-    ani3 = animation.FuncAnimation(fig, update_plot, frames= range(frames),fargs=(data3, scat3,time)) 
-   
+    plt.xlabel("Time (ms)")
+    plt.ylim(0,10)
+    plt.colorbar(scat3, spacing='proportional')
+    ani3 = animation.FuncAnimation(fig, update_plot, frames= range(frames),fargs=(data3, scat3,time))    
+    
+    plt.subplot(515) 
+    scat4 = plt.scatter(range(len(data4[0])),data4[0][...,0], s=1, c = data4[0][...,1])
+    plt.ylabel("Hidden Neuron Group Weights")
+    plt.xlabel("Time (ms)")
+    plt.ylim(0,10)
+    plt.colorbar(scat4, spacing='proportional')
+    ani4 = animation.FuncAnimation(fig, update_plot, frames= range(frames),fargs=(data4, scat4,time))    
+    
     plt.show()
 
-    return ani2
+    return ani1, ani2, ani3, ani4
 
-
-
-####General Parameters####
+##General Parameters####
 total_simulation_time = 3600
 frames = 20
 
 with open('data.txt') as json_data:
     d = json.load(json_data)
 fig = plt.figure(1)
-plt.subplot(411)
+plt.subplot(511)
 plt.plot(d["saving_time"],d["mean_reward"])
 plt.ylabel("Mean Reward")
 plt.xlabel("Time (ms)")
@@ -61,25 +68,28 @@ with open('weightsUP.txt') as json_data:
     d1 = json.load(json_data)
 with open('weightsDOWN.txt') as json_data:
     d2 = json.load(json_data)
-with open('weightsZERO.txt') as json_data:
+with open("weightsZERO.txt") as json_data:
     d3 = json.load(json_data)
+with open("weightsHIDDEN.txt") as json_data:
+    d4 = json.load(json_data)
 d1 = np.array(d1)
 d2 = np.array(d2)
 d3 = np.array(d3)
+d4 = np.array(d4)
+
 d1[:][...,1] -= np.min(d1[0][...,1])
 d2[:][...,1] -= np.min(d2[0][...,1])
 d3[:][...,1] -= np.min(d3[0][...,1])
+d4[:][...,1] -= np.min(d4[0][...,1])
 
 d1[:][...,1] = np.sort(d1[0][...,1])
 d2[:][...,1] = np.sort(d2[0][...,1])
 d3[:][...,1] = np.sort(d3[0][...,1])
+d4[:][...,1] = np.sort(d4[0][...,1])
 
-animatedplot(fig,d1,d2,d3)
+animatedplot(fig,d1,d2,d3,d4)
 
 
 plt.show()
 plt.close()
-
-
-
 

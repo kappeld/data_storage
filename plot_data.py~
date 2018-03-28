@@ -18,28 +18,28 @@ def animatedplot(fig,data1,data2, data3):
     time.set_text("")
     
     plt.subplot(412)
-    scat1 = plt.scatter(range(len(data1[0])),data1[0][...,0],s=1, c = data1[0][...,1])
+    scat1 = plt.scatter(range(len(data1[0])),data1[0][...,0], c = data1[0][...,1],s=1)
     plt.colorbar(scat1, spacing='proportional')
     plt.ylabel("Up Neuron Group Weights")
     plt.xlabel("Time (ms)")
-    plt.ylim(0,5)
+    plt.ylim(0,10)
     ani1 = animation.FuncAnimation(fig, update_plot, frames= range(frames),fargs=(data1, scat1,time))
 
     plt.subplot(413) 
-    scat2 = plt.scatter(range(len(data2[0])),data2[0][...,0],s=1, c = data2[0][...,1])
+    scat2 = plt.scatter(range(len(data2[0])),data2[0][...,0], c = data2[0][...,1], s =1 )
     plt.colorbar(scat2, spacing='proportional')
     plt.ylabel("Down Neuron Group Weights")
     plt.xlabel("Time (ms)")
-    plt.ylim(0,5)
+    plt.ylim(0,10)
     ani2 = animation.FuncAnimation(fig, update_plot, frames= range(frames),fargs=(data2, scat2,time))    
     
     plt.subplot(414) 
-    scat3 = plt.scatter(range(len(data3[0])),data3[0][...,0],s=1, c = data3[0][...,1])
+    scat3 = plt.scatter(range(len(data3[0])),data3[0][...,0], c = data3[0][...,1], s = 1)
     plt.colorbar(scat3, spacing='proportional')
     plt.ylabel("Zero Neuron Group Weights")
-    plt.ylim(0,5)
-    ani3 = animation.FuncAnimation(fig, update_plot, frames= range(frames),fargs=(data3, scat3,time)) 
-   
+    plt.xlabel("Time (ms)")
+    plt.ylim(0,10)
+    ani3 = animation.FuncAnimation(fig, update_plot, frames= range(frames),fargs=(data3, scat2,time))    
     plt.show()
 
     return ani2
@@ -66,15 +66,15 @@ with open('weightsZERO.txt') as json_data:
 d1 = np.array(d1)
 d2 = np.array(d2)
 d3 = np.array(d3)
-d1[:][...,1] -= np.min(d1[0][...,1])
-d2[:][...,1] -= np.min(d2[0][...,1])
-d3[:][...,1] -= np.min(d3[0][...,1])
+d1[:][...,1] -= np.min(d1[:][...,1])
+d2[:][...,1] -= np.min(d2[:][...,1])
+d3[:][...,1] -= np.min(d3[:][...,1])
 
-d1[:][...,1] = np.sort(d1[0][...,1])
-d2[:][...,1] = np.sort(d2[0][...,1])
-d3[:][...,1] = np.sort(d3[0][...,1])
+d1[:][...,1] = np.sort(d1[:][...,1])
+d2[:][...,1] = np.sort(d2[:][...,1])
+d3[:][...,1] = np.sort(d3[:][...,1])
 
-animatedplot(fig,d1,d2,d3)
+animatedplot(fig, d1, d2, d3)
 
 
 plt.show()
